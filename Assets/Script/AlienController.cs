@@ -4,8 +4,12 @@ using UnityEngine;
 
 public class AlienController : MonoBehaviour
 {
-    public float speed = 2f; // Vitesse de dÈplacement
-    //public GameObject player; // RÈfÈrence ‡ l'objet joueur
+    public float speed = 2f; // Vitesse de d√©placement
+    public Animator anim;
+
+    public Rigidbody2D rb;
+
+    private Vector2 movement; // Pour stocker la direction de mouvement calcul√©e
 
     void Update()
     {
@@ -13,10 +17,23 @@ public class AlienController : MonoBehaviour
         if (player != null)
         {
             // Calculer la direction vers le joueur
-            Vector3 direction = (player.transform.position - transform.position).normalized;
+            Vector2 direction = (player.transform.position - transform.position).normalized;
 
-            // DÈplacer l'ennemi vers le joueur
-            transform.position += direction * speed * Time.deltaTime;
+            // Appliquer le mouvement
+            movement = direction;
+
+            // Mettre √† jour les param√®tres d'animation en fonction de la direction
+            anim.SetFloat("Horizontal", movement.x);
+            anim.SetFloat("Vertical", movement.y);
+
+            // D√©placer l'alien vers le joueur
+            transform.position += (Vector3)movement * speed * Time.deltaTime;
         }
+    }
+
+    void FixedUpdate()
+    {
+        // D√©placer l'alien en utilisant le Rigidbody2D
+        rb.MovePosition(rb.position + movement * speed * Time.fixedDeltaTime);
     }
 }

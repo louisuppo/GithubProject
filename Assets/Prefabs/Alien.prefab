@@ -173,6 +173,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 2
+  anim: {fileID: 2909900780068090450}
+  rb: {fileID: 5105388557063368807}
 --- !u!95 &2909900780068090450
 Animator:
   serializedVersion: 5
