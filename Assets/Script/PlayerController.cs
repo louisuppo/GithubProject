@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -15,6 +16,7 @@ public class PlayerController : MonoBehaviour
     private bool canShoot = true;
 
     public int score = 0;
+    public TextMeshProUGUI UIscore;
 
     // Update is called once per frame
     void Update()
@@ -46,6 +48,7 @@ public class PlayerController : MonoBehaviour
             projectileShot();
             StartCoroutine(Cooldown());
         }
+        UIscore.text = score.ToString();
     }
 
     void projectileShot()
