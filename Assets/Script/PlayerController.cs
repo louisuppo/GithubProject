@@ -18,29 +18,46 @@ public class PlayerController : MonoBehaviour
     public int score = 0;
     public TextMeshProUGUI UIscore;
 
+    public Animator anim;
+
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyUp(KeyCode.A))
+            anim.SetBool("Gauche", false);
+        if (Input.GetKeyUp(KeyCode.D))
+            anim.SetBool("Droite", false);
+        if (Input.GetKeyUp(KeyCode.W))
+            anim.SetBool("Avance", false);
+        if (Input.GetKeyUp(KeyCode.S))
+            anim.SetBool("Recule", false);
+
+
         // Rotation
         if (Input.GetKey(KeyCode.A))
         {
             transform.Rotate(0, 0, rotationSpeed * Time.deltaTime);
+            anim.SetBool("Gauche", true);
         }
 
         if (Input.GetKey(KeyCode.D))
         {
             transform.Rotate(0, 0, -rotationSpeed * Time.deltaTime);
+            anim.SetBool("Droite", true);
         }
 
         // Avancer et reculer
         if (Input.GetKey(KeyCode.W))
         {
             transform.position += transform.up * speed * Time.deltaTime;
+            anim.SetBool("Avance", true);
         }
         if (Input.GetKey(KeyCode.S))
         {
             transform.position += -transform.up * speed * Time.deltaTime;
+            anim.SetBool("Recule", true);
         }
+    
 
         // Tirer un projectile
         if (Input.GetKey(KeyCode.Space) && canShoot)
@@ -53,10 +70,10 @@ public class PlayerController : MonoBehaviour
 
     void projectileShot()
     {
-        // Créer le projectile
+        // Crï¿½er le projectile
         GameObject bullet = Instantiate(bulletPrefab, bulletSpawnPoint.position, bulletSpawnPoint.rotation);
 
-        // Récupérer le Rigidbody2D du projectile et lui appliquer la vitesse
+        // Rï¿½cupï¿½rer le Rigidbody2D du projectile et lui appliquer la vitesse
         Rigidbody2D bulletRb = bullet.GetComponent<Rigidbody2D>();
         if (bulletRb != null)
         {
@@ -67,7 +84,15 @@ public class PlayerController : MonoBehaviour
     IEnumerator Cooldown()
     {
         canShoot = false;
-        yield return new WaitForSeconds(1f); // Temps d'attente avant de pouvoir tirer à nouveau
+        yield return new WaitForSeconds(1f); // Temps d'attente avant de pouvoir tirer ï¿½ nouveau
         canShoot = true;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            Destroy(gameObject);
+        }
     }
 }
