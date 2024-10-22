@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -20,7 +21,10 @@ public class PlayerController : MonoBehaviour
 
     public Animator anim;
 
-    // Update is called once per frame
+    public GameObject uiheart;
+
+    bool canMove = true;
+
     void Update()
     {
         if (Input.GetKeyUp(KeyCode.A))
@@ -34,25 +38,25 @@ public class PlayerController : MonoBehaviour
 
 
         // Rotation
-        if (Input.GetKey(KeyCode.A))
+        if (Input.GetKey(KeyCode.A) && canMove)
         {
             transform.Rotate(0, 0, rotationSpeed * Time.deltaTime);
             anim.SetBool("Gauche", true);
         }
 
-        if (Input.GetKey(KeyCode.D))
+        if (Input.GetKey(KeyCode.D)&& canMove)
         {
             transform.Rotate(0, 0, -rotationSpeed * Time.deltaTime);
             anim.SetBool("Droite", true);
         }
 
         // Avancer et reculer
-        if (Input.GetKey(KeyCode.W))
+        if (Input.GetKey(KeyCode.W)&& canMove)
         {
             transform.position += transform.up * speed * Time.deltaTime;
             anim.SetBool("Avance", true);
         }
-        if (Input.GetKey(KeyCode.S))
+        if (Input.GetKey(KeyCode.S)&& canMove)
         {
             transform.position += -transform.up * speed * Time.deltaTime;
             anim.SetBool("Recule", true);
@@ -64,8 +68,11 @@ public class PlayerController : MonoBehaviour
         {
             projectileShot();
             StartCoroutine(Cooldown());
+            if (GetComponent<SpriteRenderer>().enabled == false)
+                SceneManager.LoadScene(0);
+
         }
-        UIscore.text = score.ToString();
+        UIscore.text = string.Format("{0:0000}",score);
     }
 
     void projectileShot()
@@ -92,7 +99,9 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Enemy"))
         {
-            Destroy(gameObject);
+            GetComponent<SpriteRenderer>().enabled = false;
+            canMove=false;
+            Destroy(uiheart);
         }
     }
 }
