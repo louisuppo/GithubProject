@@ -5,10 +5,11 @@ using UnityEngine;
 public class AlienController : MonoBehaviour
 {
     public float speed = 2f; // Vitesse de déplacement
-    public GameObject player; // Référence à l'objet joueur
+    //public GameObject player; // Référence à l'objet joueur
 
     void Update()
     {
+        PlayerController player = FindAnyObjectByType<PlayerController>();
         if (player != null)
         {
             // Calculer la direction vers le joueur
